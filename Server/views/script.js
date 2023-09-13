@@ -1,9 +1,10 @@
 const socket = io("/"); // Create our socket
 const videoGrid = document.getElementById("video-grid"); // Find the Video-Grid element
-const disconnectButton = document.getElementById("disconnectButton");
+
 const myPeer = new Peer(); // Creating a peer element which represents the current user
 const myVideo = document.createElement("video"); // Create a new video tag to show our video
 myVideo.muted = true; // Mute ourselves on our end so there is no feedback loop
+myVideo.setAttribute("id", "myVideo");
 
 // Access the user's video and audio
 navigator.mediaDevices
@@ -12,6 +13,7 @@ navigator.mediaDevices
     audio: true,
   })
   .then((stream) => {
+    console.log("hi");
     addVideoStream(myVideo, stream); // Display our video to ourselves
 
     myPeer.on("call", (call) => {
@@ -30,6 +32,11 @@ navigator.mediaDevices
       // If a new user connect
       connectToNewUser(userId, stream);
     });
+
+    socket.on("user-disconnected", (userId) => {
+      // remove video or add your code here
+      console.log("User", userId, " Disconected");
+    });
   });
 
 myPeer.on("open", (id) => {
@@ -38,8 +45,8 @@ myPeer.on("open", (id) => {
 });
 
 function connectToNewUser(userId, stream) {
-  var acceptsCall = confirm("Videocall incoming, do you want to accept it ?");
-  if (acceptsCall) {
+  // var acceptsCall = confirm("Videocall incoming, do you want to accept it ?");
+  if (true) {
     // This runs when someone joins our room
     const call = myPeer.call(userId, stream); // Call the user who just joined
     // Add their video
@@ -62,3 +69,18 @@ function addVideoStream(video, stream) {
   });
   videoGrid.append(video); // Append video element to videoGrid
 }
+
+const disconnectButton = document.getElementById("disconnectButton");
+disconnectButton.addEventListener("click", () => {
+  console.log("please work@!!!");
+
+  // Check if the peer connection exists
+  if (myPeer) {
+    // Close the peer connection
+    myPeer.disconnect();
+    myPeer.destroy();
+    console.log("Peer connection closed.");
+  } else {
+    console.warn("No peer connection to close.");
+  }
+});

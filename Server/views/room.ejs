@@ -30,6 +30,27 @@
         -webkit-transform: scaleX(-1);
         transform: scaleX(-1);
       }
+
+      #myVideo {
+        /* opacity: 50%; */
+      }
+      .overlayText {
+        position: absolute;
+        align-items: center;
+        /* padding-left: 45%; */
+        top: 10px;
+        /* left: 50px; */
+        width: 300px;
+        /* background-color: rgb(74, 73, 73); */
+        z-index: 1;
+      }
+
+      #topText {
+        color: white;
+        font-size: 20px;
+        align-self: center;
+        margin-left: 45%;
+      }
       #buttons {
         width: 100%;
         align-items: center;
@@ -41,8 +62,13 @@
   <body>
     <!-- Make our video grid -->
     <div id="video-grid"></div>
+    <div class="overlayText">
+      <p id="topText">You</p>
+    </div>
     <div id="buttons">
-      <button id="disconnectButton" type="button">Disconnect</button>
+      <button id="disconnectButton" type="button" onclick="myPeer.disconnect()">
+        Disconnect
+      </button>
     </div>
   </body>
 </html>
